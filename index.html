@@ -1,292 +1,759 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Menenti Motors — Showroom</title>
+:root{
+      --red:#d40000;
+      --black:#000;
+      --white:#fff;
+      --dark:#0b0b0b;
+      --muted: rgba(255,255,255,0.75);
+      --glass: rgba(255,255,255,0.03);
+      --ease: 300ms cubic-bezier(.2,.9,.3,1);
+      --radius: 14px;
+    }
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Poppins",system-ui,Segoe UI,Roboto,Arial;
+      background:var(--black);
+      color:var(--white);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      /* Layout: make footer stick to bottom when content is short */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-  <!-- main stylesheet – root relative -->
-  <link rel="stylesheet" href="/css/index.css">
+    /* NAV */
+    .nav{
+      position:fixed; inset:0 0 auto 0; height:80px; z-index:60;
+      display:flex; align-items:center; backdrop-filter:blur(6px);
+      background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.35));
+      border-bottom:1px solid rgba(255,255,255,0.04);
+      /* allow smooth hide/show on scroll */
+      transition: transform 260ms var(--ease);
+    }
 
-</head>
-<body>
+    /* When nav is hidden, slide it up out of view */
+    .nav.nav--hidden{ transform: translateY(-110%); }
+    .nav .nav-inner{
+      /* make header span the full viewport but keep a tiny gap from the wall */
+      width:100%; max-width:none; margin:0; padding:0 16px; /* small 6px gap each side */
+      display:flex; align-items:center; justify-content:space-between;
+    }
 
-  <!-- NAVBAR -->
-  <header class="nav">
-    <div class="nav-inner">
-      <a class="brand" href="/">
-        <div class="logo-mark" aria-hidden="true">
-          <img src="/pics/logo.jpg" width="56" height="56" alt="Menenti Motors Logo">
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">Menenti</span>
-          <span class="brand-sub">Motors</span>
-        </div>
-      </a>
+  /* Logo */
+  /* Keep brand as a link when wrapped in an anchor — remove default link styles */
+  .brand{display:flex;align-items:center;gap:6px;text-decoration:none;color:inherit}
+    .logo-mark{
+      width:56px;height:56px;border-radius:0;background:transparent;
+      display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--white);
+      font-size:20px;box-shadow:none;overflow: hidden;
+    }
+    .logo-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .brand-text{line-height:1}
+    .brand-name{display:block;font-weight:700;font-size:18px;color:var(--red)}
+    .brand-sub{display:block;font-size:12px;color:var(--muted)}
 
-      <nav class="nav-actions">
-        <div class="lang-selector">
-          <div class="lang-current" id="langCurrent">EN ▾</div>
-          <div class="lang-dropdown" id="langDropdown">
-            <div class="lang-option" data-lang="en">English</div>
-            <div class="lang-option" data-lang="it">Italiano</div>
-            <div class="lang-option" data-lang="de">Deutsch</div>
-            <div class="lang-option" data-lang="pl">Polski</div>
-            <div class="lang-option" data-lang="fr">Français</div>
-            <div class="lang-option" data-lang="ar">العربية</div>
-            <div class="lang-option" data-lang="ru">Русский</div>
-            <div class="lang-option" data-lang="es">Español</div>
-          </div>
-        </div>
+    /* Right actions */
+  .nav-actions{display:flex;align-items:center;gap:4px}
 
-        <button id="profileBtn" class="profile" aria-label="Open profile" data-i18n-aria="aria.openProfile">
-          <svg class="icon icon-profile" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="8" r="3.5" fill="currentColor" />
-            <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
+    /* Profile button next to hamburger */
+    .profile{
+      background:transparent; color:var(--red); border:1px solid rgba(212,0,0,0.12);
+      padding:8px 10px; border-radius:10px; cursor:pointer; font-size:16px; line-height:1;
+    }
+    .profile:hover{ color:var(--white); border-color:var(--red); box-shadow:0 8px 24px rgba(212,0,0,0.08); }
+    .lang-selector{position:relative;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+    .lang-current{display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;transition:all var(--ease);white-space:nowrap}
+    .lang-current:hover{color:var(--white);background:rgba(255,255,255,0.05)}
+    .lang-dropdown{position:fixed;top:auto;right:auto;margin-top:0;margin-bottom:0;min-width:140px;max-height:300px;overflow-y:auto;background:var(--bg);border:1px solid rgba(255,255,255,0.1);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.3);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all var(--ease);z-index:1001}
+    .lang-selector.open .lang-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+    .lang-option{padding:10px 14px;cursor:pointer;transition:all var(--ease);border-bottom:1px solid rgba(255,255,255,0.05);display:block;color:var(--white)}
+    .lang-option:last-child{border-bottom:none}
+    .lang-option:hover{background:rgba(212,0,0,0.15);color:var(--red)}
+    .lang-option.active{color:var(--red);font-weight:600;background:rgba(212,0,0,0.05)}
+    
+    /* RTL support for Arabic */
+    html[dir="rtl"] .nav-inner{flex-direction:row-reverse}
+    html[dir="rtl"] .side-nav{right:auto;left:-100%}
+    html[dir="rtl"] .side-nav.open{left:0;right:auto}
+    html[dir="rtl"] .side-links a{text-align:right}
+    html[dir="rtl"] .hero-overlay{text-align:right}
+    html[dir="rtl"] .section-head{flex-direction:row-reverse}
+    html[dir="rtl"] .footer-inner{flex-direction:row-reverse}
+    .search{position:relative;display:flex;align-items:center}
+    .search input{
+      width:240px;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.06);
+      background:transparent;color:var(--white);transition:all var(--ease);
+    }
+    .search input:focus{width:320px;outline:none;border-color:rgba(212,0,0,0.5);box-shadow:0 6px 30px rgba(212,0,0,0.06)}
+    .search button{margin-left:8px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:16px}
 
-        <button id="navToggle" class="hamburger" aria-label="Open navigation" data-i18n-aria="aria.openNav">☰</button>
-      </nav>
-    </div>
-  </header>
+  /* Collapsed search when user presses Enter */
+  .search.search-closed input{width:0;padding:0;border-color:transparent;opacity:0;pointer-events:none}
+  .search.search-closed button{display:none}
 
-  <!-- SIDE NAV (sliding panel) -->
-  <aside id="sideNav" class="side-nav" aria-hidden="true">
-    <div class="side-inner">
-      <button id="sideClose" class="close">✕</button>
-      <ul class="side-links">
-        <li><a href="/" data-i18n="nav.home">Home</a></li>
-        <li><a href="/showroom.html" data-i18n="nav.showroom">Showroom</a></li>
-        <li><a href="#" id="contactUsLink" data-i18n="nav.contact">Contact Us</a></li>
-        <li><a href="#" id="requestVehicleLink" data-i18n="nav.request">Request vehicle</a></li>
-        <li><a href="/Aboutus.html" data-i18n="nav.about">About Us</a></li>
-      </ul>
+  /* Highlighted search hit */
+  .search-hit{color:var(--red);font-weight:700;background:transparent;padding:0 2px;border-radius:2px}
 
-      <div class="side-social">
-        <a href="https://www.instagram.com/menentimotors/" aria-label="Instagram">Instagram</a>
-        <a href="#" aria-label="LinkedIn">LinkedIn</a>
-        <a href="https://www.tiktok.com/@menentimotors?_r=1&_t=ZN-91wRO19dxMU" aria-label="Tiktok">Tiktok</a>
-      </div>
-    </div>
-  </aside>
+    /* hamburger */
+    .hamburger{
+      background:var(--red); color:var(--white); border:none; padding:8px 12px;border-radius:10px;font-size:18px;
+      cursor:pointer; box-shadow:0 6px 18px rgba(212,0,0,0.18);
+    }
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-media" role="img" aria-label="Luxury car background" data-i18n-aria="aria.luxuryCar">
-      <video class="hero-video" autoplay muted loop playsinline preload="auto">
-        <source src="/pics/ferrari-hero.mp4" type="video/mp4">
-        <p>Your browser does not support the video tag.</p>
-      </video>
-    </div>
-    <div class="hero-overlay">
-      <h1 class="hero-title" data-i18n="hero.title">When passion meets precision</h1>
-      <p class="hero-sub" data-i18n="hero.subtitle">Exclusive, curated performance vehicles — discover our latest collection.</p>
-      <a class="hero-cta" href="/showroom.html" data-i18n="hero.cta">Explore the showroom</a>
-    </div>
-  </section>
+    /* SIDE NAV */
+    .side-nav{
+      position:fixed; top:0; right:-320px; width:320px; height:100vh; z-index:80;
+      background:linear-gradient(180deg,var(--dark), rgba(11,11,11,0.95)); padding:28px;
+      box-shadow:-40px 0 80px rgba(0,0,0,0.6); transition: right 360ms cubic-bezier(.2,.9,.3,1);
+      border-left:1px solid rgba(255,255,255,0.03);
+    }
+    .side-nav.open{right:0}
+    .side-inner{display:flex;flex-direction:column;height:100%}
+    .side-inner .close{align-self:flex-end;border:none;background:transparent;color:var(--muted);font-size:20px;cursor:pointer}
+    .side-links{list-style:none;padding:16px 0;margin:12px 0;display:flex;flex-direction:column;gap:18px}
+    .side-links a{color:var(--white);font-weight:600;text-decoration:none;font-size:18px;opacity:0.95}
+    .side-links a:hover{color:var(--red);transform:translateX(6px);transition:all 180ms}
 
-  <!-- SHOWROOM GRID -->
-  <main id="showroom" class="showroom">
-    <header class="section-head">
-      <h2 data-i18n="showroom.title">New vehicles</h2>
-      <p class="muted" data-i18n="showroom.subtitle">Selected models — click or hover for details</p>
-    </header>
+    /* HERO */
+    .hero{position:relative;height:72vh;min-height:520px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:80px}
+    .hero-media{
+      position:absolute;inset:0;background-size:cover;background-position:center;
+      transform:scale(1.05);filter:contrast(1.05) brightness(0.45);
+      transition:transform 800ms ease;will-change:transform;
+    }
+    .hero-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hero-overlay{position:relative;z-index:2;text-align:center;padding:0 20px;max-width:1100px}
+    .hero-title{font-size:42px;margin:0 0 12px;letter-spacing:0.4px;font-weight:800;color:var(--white)}
+    .hero-sub{margin:0 0 18px;color:var(--muted);font-weight:300}
+    .hero-cta{display:inline-block;padding:12px 20px;border-radius:10px;background:transparent;border:2px solid var(--red);color:var(--red);
+     text-decoration:none;font-weight:700;transition:all var(--ease)}
+    .hero-cta:hover{background:var(--red);color:var(--white);transform:translateY(-4px);box-shadow:0 14px 40px rgba(212,0,0,0.18)}
 
-    <div class="grid" id="vehicleGrid">
-      <!-- Card 1 -->
-      <article class="card" data-search="ferrari purosangue 650hp red">
-        <div class="card-media">
-          <img data-src="/pics/ferrari-purosangue.jpg" alt="Ferrari Purosangue" class="lazy">
-        </div>
-        <div class="card-body">
-          <h3 class="model">Ferrari Purosangue</h3>
-          <p class="specs">650 HP • 0–100 km/h 3.3s</p>
-          <div class="more">
-            <p><span data-i18n="vehicle.year">Year</span>: 2024</p>
-            <p><span data-i18n="vehicle.price">Price</span>: € 520,000</p>
-            <a href="#" class="btn" data-i18n="vehicle.viewDetails">View details</a>
-          </div>
-        </div>
-        <div class="card-extended">
-          <h4 data-i18n="vehicle.specs">Technical Specifications</h4>
-          <div class="card-specs">
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.engine">Engine:</span>
-              <span class="spec-value">6.5L V12</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.horsepower">Horsepower:</span>
-              <span class="spec-value">715 HP</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.torque">Torque:</span>
-              <span class="spec-value">528 lb-ft</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.transmission">Transmission:</span>
-              <span class="spec-value">8-Speed DCT</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.zeroToSixty">0-60 mph:</span>
-              <span class="spec-value">3.1 sec</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.topSpeed">Top Speed:</span>
-              <span class="spec-value">193 mph</span>
-            </div>
-          </div>
-          <div class="price-tag">€ 520,000</div>
-        </div>
-      </article>
+  /* SHOWROOM */
+  /* Add top spacing so content sits below the fixed nav (nav height is 80px) */
+  .showroom{max-width:1200px;margin:120px auto 40px;padding:20px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .section-head h2{margin:0;font-size:22px}
+    .section-head .muted{color:var(--muted);font-size:13px}
 
-      <!-- Card 2 -->
-      <article class="card" data-search="aston martin dbr22 v12 carbon black">
-        <div class="card-media">
-          <img data-src="/pics/aston-martin-DBR22.jpg" alt="Aston Martin DBR22" class="lazy">
-        </div>
-        <div class="card-body">
-          <h3 class="model">Aston Martin DBR22</h3>
-          <p class="specs">V12 • Handbuilt • Limited</p>
-          <div class="more">
-            <p><span data-i18n="vehicle.year">Year</span>: 2023</p>
-            <p><span data-i18n="vehicle.price">Price</span>: € 1,200,000</p>
-            <a href="#" class="btn" data-i18n="vehicle.viewDetails">View details</a>
-          </div>
-        </div>
-        <div class="card-extended">
-          <h4 data-i18n="vehicle.specs">Technical Specifications</h4>
-          <div class="card-specs">
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.engine">Engine:</span>
-              <span class="spec-value">5.2L Twin-Turbo V12</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.horsepower">Horsepower:</span>
-              <span class="spec-value">705 HP</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.torque">Torque:</span>
-              <span class="spec-value">555 lb-ft</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.transmission">Transmission:</span>
-              <span class="spec-value">8-Speed Automatic</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.zeroToSixty">0-60 mph:</span>
-              <span class="spec-value">3.4 sec</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.topSpeed">Top Speed:</span>
-              <span class="spec-value">198 mph</span>
-            </div>
-          </div>
-          <div class="price-tag">€ 1,200,000</div>
-        </div>
-      </article>
+  /* Category buttons */
+  .categories{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+  .category-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:600}
+  .category-btn:hover{color:var(--white);border-color:var(--red)}
+  .category-btn.active{background:var(--red);color:var(--white);border-color:var(--red);box-shadow:0 8px 28px rgba(212,0,0,0.12)}
 
-      <!-- Card 3 -->
-      <article class="card" data-search="porsche carrera gt 700hp silver">
-        <div class="card-media">
-          <img data-src="/pics/porsche-carrera-gt.jpg" alt="Porsche Carrera GT" class="lazy">
-        </div>
-        <div class="card-body">
-          <h3 class="model">Porsche Carrera GT</h3>
-          <p class="specs">700 HP • Iconic • Rare</p>
-          <div class="more">
-            <p><span data-i18n="vehicle.year">Year</span>: 2004</p>
-            <p><span data-i18n="vehicle.price">Price</span>: € 2,100,000</p>
-            <a href="#" class="btn" data-i18n="vehicle.viewDetails">View details</a>
-          </div>
-        </div>
-        <div class="card-extended">
-          <h4 data-i18n="vehicle.specs">Technical Specifications</h4>
-          <div class="card-specs">
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.engine">Engine:</span>
-              <span class="spec-value">5.7L V10</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.horsepower">Horsepower:</span>
-              <span class="spec-value">603 HP</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.torque">Torque:</span>
-              <span class="spec-value">435 lb-ft</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.transmission">Transmission:</span>
-              <span class="spec-value">6-Speed Manual</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.zeroToSixty">0-60 mph:</span>
-              <span class="spec-value">3.5 sec</span>
-            </div>
-            <div class="spec-item">
-              <span class="spec-label" data-i18n="vehicle.topSpeed">Top Speed:</span>
-              <span class="spec-value">205 mph</span>
-            </div>
-          </div>
-          <div class="price-tag">€ 2,100,000</div>
-        </div>
-      </article>
-    </div>
-  </main>
+  /* GRID / CARDS */
+  /* Force three columns on desktop, fall back to 2 / 1 on smaller screens */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03);
+      transition:transform 360ms cubic-bezier(.2,.9,.3,1), box-shadow 360ms;
+      cursor:pointer;display:flex;flex-direction:column;
+      position: relative;
+    }
+    .card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,0.6)}
+    
+    /* Red underglow effect */
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 10%;
+      width: 80%;
+      height: 20px;
+      background: var(--red);
+      filter: blur(15px);
+      opacity: 0;
+      transition: opacity 300ms ease;
+      z-index: -1;
+    }
+    .card:hover::after {
+      opacity: 0.7;
+    }
+    
+    .card-media{height:200px;overflow:hidden;background:#111;position:relative}
+    .card-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 600ms}
+    .card:hover .card-media img{transform:scale(1.06)}
 
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div>© Menenti Motors</div>
-      <div class="footer-links"><a href="#" data-i18n="footer.privacy">Privacy</a> · <a href="#" data-i18n="footer.terms">Terms</a></div>
-    </div>
-  </footer>
+    /* body */
+    .card-body{padding:16px 16px 18px;color:var(--muted);transition:padding 360ms ease}
+    .model{margin:0;font-size:16px;color:var(--white);font-weight:700}
+    .specs{margin:6px 0 10px;font-size:13px;color:rgba(255,255,255,0.8)}
 
-  <!-- AUTH MODAL -->
-  <div id="authModal" class="auth-modal" aria-hidden="true">
-    <div class="auth-modal-content">
-      <button class="auth-close" id="authClose">✕</button>
-      
-      <!-- Sign In Form -->
-      <div id="signInForm" class="auth-form active">
-        <h2 data-i18n="auth.signIn">Sign In</h2>
-        <form id="signInFormElement">
-          <div class="form-group">
-            <label for="signInEmail" data-i18n="auth.email">Email</label>
-            <input type="email" id="signInEmail" required autocomplete="email">
-          </div>
-          <div class="form-group">
-            <label for="signInPassword" data-i18n="auth.password">Password</label>
-            <input type="password" id="signInPassword" required autocomplete="current-password">
-          </div>
-          <button type="submit" class="auth-btn" data-i18n="auth.signIn">Sign In</button>
-          <p class="auth-switch">
-            <a href="#" id="forgotPasswordLink" style="display:block;margin-bottom:12px;color:var(--red);text-decoration:none;">Forgot Password?</a>
-            <span data-i18n="auth.noAccount">Don't have an account?</span>
-            <a href="#" id="switchToSignUp" data-i18n="auth.signUp">Sign Up</a>
-          </p>
-        </form>
-      </div>
+    .more{max-height:0;overflow:hidden;transition:max-height 360ms ease}
+    .card:hover .more{max-height:220px}
+    .more p{margin:6px 0;font-size:14px;color:var(--muted)}
+    .btn{display:inline-block;margin-top:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);
+     background:transparent;color:var(--muted);text-decoration:none;font-weight:600}
+    .btn:hover{color:var(--white);border-color:var(--red);box-shadow:0 12px 36px rgba(212,0,0,0.12)}
 
-      <!-- ... the rest of the modals remain exactly the same ... -->
+    /* Extended card details */
+    .card-extended {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(11, 11, 11, 0.95);
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 400ms cubic-bezier(0.2, 0.9, 0.3, 1);
+      z-index: 10;
+      border-top: 1px solid rgba(212, 0, 0, 0.3);
+    }
+    .card:hover .card-extended {
+      transform: translateY(0);
+    }
+    .card-extended h4 {
+      margin: 0 0 12px;
+      color: var(--red);
+      font-size: 16px;
+    }
+    .card-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 5px;
+    }
+    .spec-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .spec-value {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .price-tag {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--red);
+      margin: 10px 0;
+      padding: 8px;
+      background: rgba(212, 0, 0, 0.1);
+      border-radius: 6px;
+    }
 
-    </div>
-  </div>
+    /* FOOTER */
+  /* Footer should stay at the bottom. Use margin-top:auto so it pushes to the end of the flex column. */
+  .site-footer{padding:28px 12px;border-top:1px solid rgba(255,255,255,0.03);margin-top:auto}
+    .footer-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;color:var(--muted)}
 
-  <!-- CHAT MODAL, ERROR MODAL, REQUEST MODAL remain unchanged -->
+/* AUTH MODAL */
+.auth-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all var(--ease)}
+.auth-modal.open{opacity:1;visibility:visible}
+.auth-modal-content{position:relative;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:32px;max-width:420px;width:90%;max-height:90vh;overflow-y:auto;transform:scale(0.9);transition:all var(--ease);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.auth-modal.open .auth-modal-content{transform:scale(1)}
+.auth-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all var(--ease)}
+.auth-close:hover{color:var(--white);background:rgba(255,255,255,0.1)}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.auth-form h2{margin:0 0 24px;font-size:28px;font-weight:700;color:var(--white);text-align:center}
+.form-group{margin-bottom:20px}
+.form-group label{display:block;margin-bottom:8px;color:var(--muted);font-size:14px;font-weight:500}
+.form-group input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:var(--white);font-size:15px;transition:all var(--ease);font-family:inherit}
+.form-group input:focus{outline:none;border-color:var(--red);background:rgba(255,255,255,0.08);box-shadow:0 0 0 3px rgba(212,0,0,0.1)}
+.form-group input::placeholder{color:rgba(255,255,255,0.3)}
+.auth-btn{width:100%;padding:14px;background:var(--red);color:var(--white);border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all var(--ease);margin-top:8px}
+.auth-btn:hover{background:#b30000;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,0,0,0.3)}
+.auth-btn:active{transform:translateY(0)}
+.auth-btn-secondary{background:transparent;border:2px solid var(--red);color:var(--red)}
+.auth-btn-secondary:hover{background:rgba(212,0,0,0.1)}
+.auth-switch{margin-top:20px;text-align:center;color:var(--muted);font-size:14px}
+.auth-switch a{color:var(--red);text-decoration:none;font-weight:600;margin-left:4px}
+.auth-switch a:hover{text-decoration:underline}
+.user-info{text-align:center;margin-bottom:24px}
+.user-avatar{width:80px;height:80px;margin:0 auto 16px;color:var(--red);display:flex;align-items:center;justify-content:center;background:rgba(212,0,0,0.1);border-radius:50%;border:2px solid var(--red)}
+.user-info h3{margin:0 0 8px;font-size:22px;color:var(--white)}
+.user-info p{margin:0;color:var(--muted);font-size:14px}
+.profile.logged-in{position:relative}
+.profile.logged-in::after{content:'';position:absolute;top:4px;right:4px;width:8px;height:8px;background:#00ff00;border-radius:50%;border:2px solid var(--dark);box-shadow:0 0 0 2px var(--red)}
 
-  <!-- Scripts – root relative paths -->
-  <script src="/js/security.js"></script>
-  <script src="/js/error-handler.js"></script>
-  <script src="/js/email-service.js"></script>
-  <script src="/js/lang.js"></script>
-  <script src="/js/auth.js"></script>
-  <script src="/js/chat.js"></script>
-  <script src="/js/admin.js"></script>
-  <script src="/js/index.js"></script>
+/* CHAT MODAL */
+.chat-modal{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10001;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all var(--ease)}
+.chat-modal.open{opacity:1;visibility:visible}
+.chat-modal-content{position:relative;background:var(--dark);border:1px solid rgba(255,255,255,0.1);border-radius:16px;max-width:500px;width:90%;max-height:85vh;display:flex;flex-direction:column;transform:scale(0.9);transition:all var(--ease);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.chat-modal.open .chat-modal-content{transform:scale(1)}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.chat-header-info h3{margin:0 0 4px;font-size:20px;font-weight:700;color:var(--white)}
+.chat-status{margin:0;font-size:12px;color:#00ff00;display:flex;align-items:center;gap:6px}
+.chat-status::before{content:'';width:8px;height:8px;background:#00ff00;border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.chat-close{background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all var(--ease)}
+.chat-close:hover{color:var(--white);background:rgba(255,255,255,0.1)}
+.chat-messages{flex:1;overflow-y:auto;padding:20px 24px;min-height:300px;max-height:400px;display:flex;flex-direction:column;gap:16px}
+.chat-message{display:flex;gap:12px;align-items:flex-start;animation:slideIn 0.3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.chat-message-user{flex-direction:row-reverse}
+.chat-message-user .message-content{background:var(--red);color:var(--white);border-radius:16px 16px 4px 16px}
+.chat-message-bot .message-content{background:rgba(255,255,255,0.05);color:var(--white);border-radius:16px 16px 16px 4px}
+.message-avatar{width:32px;height:32px;border-radius:50%;background:rgba(212,0,0,0.2);display:flex;align-items:center;justify-content:center;color:var(--red);flex-shrink:0}
+.message-content{padding:12px 16px;max-width:75%;position:relative}
+.message-content p{margin:0;font-size:14px;line-height:1.5;word-wrap:break-word}
+.message-time{display:block;font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px}
+.chat-input-container{padding:16px 24px;border-top:1px solid rgba(255,255,255,0.1)}
+.chat-form{display:flex;gap:8px;align-items:center}
+.chat-input-container input{flex:1;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:24px;color:var(--white);font-size:14px;font-family:inherit;transition:all var(--ease)}
+.chat-input-container input:focus{outline:none;border-color:var(--red);background:rgba(255,255,255,0.08);box-shadow:0 0 0 3px rgba(212,0,0,0.1)}
+.chat-input-container input::placeholder{color:rgba(255,255,255,0.3)}
+.chat-send-btn{width:44px;height:44px;background:var(--red);color:var(--white);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--ease);flex-shrink:0}
+.chat-send-btn:hover{background:#b30000;transform:scale(1.05);box-shadow:0 4px 12px rgba(212,0,0,0.3)}
+.chat-send-btn:active{transform:scale(0.95)}
+.chat-send-btn:disabled{opacity:0.5;cursor:not-allowed}
+.chat-messages::-webkit-scrollbar{width:6px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+.chat-messages::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}
+.sign-in-prompt{display:flex;align-items:center;justify-content:center;min-height:300px;padding:40px 20px}
+.sign-in-prompt-content{text-align:center;max-width:320px}
+.sign-in-icon{width:80px;height:80px;margin:0 auto 24px;color:var(--red);display:flex;align-items:center;justify-content:center;background:rgba(212,0,0,0.1);border-radius:50%;border:2px solid var(--red)}
+.sign-in-prompt-content h3{margin:0 0 12px;font-size:22px;font-weight:700;color:var(--white)}
+.sign-in-prompt-content p{margin:0 0 24px;color:var(--muted);font-size:14px;line-height:1.6}
+.chat-sign-in-btn{padding:12px 24px;background:var(--red);color:var(--white);border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:all var(--ease)}
+.chat-sign-in-btn:hover{background:#b30000;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,0,0,0.3)}
+.chat-input-container input:disabled{opacity:0.5;cursor:not-allowed}
 
-</body>
-</html>
+/* Responsive chat */
+@media (max-width:600px){
+  .chat-modal-content{width:95%;max-height:90vh}
+  .chat-header{padding:16px 20px}
+  .chat-messages{padding:16px 20px;max-height:350px}
+  .chat-input-container{padding:12px 20px}
+  .message-content{max-width:85%}
+}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .search input{width:160px}
+      .hero-title{font-size:32px}
+      .hero{min-height:420px}
+      /* two columns on medium screens */
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:600px){
+      .nav-inner{padding:0 14px}
+      .search{display:none} /* keep header clean on small screens */
+      .hero{height:58vh}
+      .grid{grid-template-columns:1fr}
+      .side-nav{width:100%;right:-100%}
+      .side-nav.open{right:0}
+      .card-extended {
+        padding: 15px;
+      }
+      .card-specs {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Admin Panel */
+    .admin-panel {
+      background: rgba(212, 0, 0, 0.1);
+      border: 1px solid rgba(212, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 24px 0;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      animation: slideIn 300ms ease;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all var(--ease);
+    }
+
+    .btn-primary:hover {
+      background: #b80000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 0, 0, 0.3);
+    }
+
+    .btn-danger {
+      background: #cc0000;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all var(--ease);
+    }
+
+    .btn-danger:hover {
+      background: #990000;
+    }
+
+    /* Card admin controls */
+    .card-admin-controls {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 6px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .card:hover .card-admin-controls {
+      opacity: 1;
+    }
+
+    .card-admin-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 200ms ease;
+    }
+
+    .card-admin-controls button:hover {
+      background: rgba(212, 0, 0, 0.5);
+      transform: scale(1.1);
+    }
+
+    /* Admin Modal */
+    .admin-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(4px);
+    }
+
+    .admin-modal-content {
+      position: relative;
+      background: var(--dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(1);
+      transition: all var(--ease);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .admin-modal-content h2 {
+      margin-top: 0;
+      margin-bottom: 24px;
+      font-size: 24px;
+      color: var(--white);
+    }
+
+    .admin-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all var(--ease);
+      padding: 4px 8px;
+    }
+
+    .admin-close:hover {
+      color: var(--red);
+      transform: scale(1.1);
+    }
+
+    .admin-vehicle-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: var(--white);
+      font-size: 14px;
+      transition: all var(--ease);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--red);
+      background: rgba(212, 0, 0, 0.05);
+      box-shadow: 0 0 0 3px rgba(212, 0, 0, 0.1);
+    }
+
+    .form-group select option {
+      background: var(--dark);
+      color: var(--white);
+    }
+
+    .admin-form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .admin-form-actions button {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--ease);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Confirmation Modal */
+    .confirm-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10002;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--ease);
+    }
+
+    .confirm-modal[aria-hidden="false"] {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .confirm-modal-content {
+      position: relative;
+      background: var(--dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 90%;
+      transform: scale(0.9);
+      transition: all var(--ease);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .confirm-modal[aria-hidden="false"] .confirm-modal-content {
+      transform: scale(1);
+    }
+
+    .confirm-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      animation: pulse 2s infinite;
+    }
+
+    .confirm-title {
+      margin: 0 0 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .confirm-message {
+      margin: 0 0 32px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .confirm-actions button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--ease);
+      min-width: 100px;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-danger:hover {
+      background: #b30000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(212, 0, 0, 0.4);
+    }
+
+    /* Error Modal */
+    .error-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10003;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--ease);
+    }
+
+    .error-modal[aria-hidden="false"] {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .error-modal-content {
+      position: relative;
+      background: var(--dark);
+      border: 1px solid rgba(212, 0, 0, 0.3);
+      border-radius: 16px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 90%;
+      transform: scale(0.9);
+      transition: all var(--ease);
+      box-shadow: 0 20px 60px rgba(212, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .error-modal[aria-hidden="false"] .error-modal-content {
+      transform: scale(1);
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    .error-title {
+      margin: 0 0 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--red);
+    }
+
+    .error-message {
+      margin: 0 0 32px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .error-actions button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--ease);
+      min-width: 100px;
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: #b30000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(212, 0, 0, 0.4);
+    }
