@@ -1,82 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-&nbsp;&nbsp;<meta charset="UTF-8">
-&nbsp;&nbsp;<meta name="viewport" content="width=device-width, initial-scale=1.0">
-&nbsp;&nbsp;<title>Menenti Motors | Showroom</title>
-&nbsp;&nbsp;<meta name="description" content="Luxury and performance vehicles — Menenti Motors">
-&nbsp;&nbsp;<!-- Google Font -->
-&nbsp;&nbsp;<link rel="preconnect" href="https://fonts.googleapis.com">
-&nbsp;&nbsp;<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-&nbsp;&nbsp;<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
-&nbsp;&nbsp;<!-- Main CSS (RELATIVE PATH – THIS IS THE KEY) -->
-&nbsp;&nbsp;<link rel="stylesheet" href="./css/index.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menenti Motors | Showroom</title>
+  <meta name="description" content="Luxury and performance vehicles — Menenti Motors" />
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="./css/index.css" />
 </head>
 <body>
-&nbsp;&nbsp;<!-- HEADER / NAV -->
-&nbsp;&nbsp;<header class="navbar">
-&nbsp;&nbsp;&nbsp;&nbsp;<a class="brand" href="./">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="pics/logo.jpg" alt="Menenti Motors Logo" width="48" height="48">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Menenti Motors</span>
-&nbsp;&nbsp;&nbsp;&nbsp;</a>
-&nbsp;&nbsp;&nbsp;&nbsp;<nav>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./">Home</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroom.html">Showroom</a>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#contact">Contact</a>
-&nbsp;&nbsp;&nbsp;&nbsp;</nav>
-&nbsp;&nbsp;</header>
-&nbsp;&nbsp;<!-- HERO SECTION -->
-&nbsp;&nbsp;<section class="hero">
-&nbsp;&nbsp;&nbsp;&nbsp;<video autoplay muted loop playsinline>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<source src="pics/ferrari-hero.mp4" type="video/mp4">
-&nbsp;&nbsp;&nbsp;&nbsp;</video>
-&nbsp;&nbsp;&nbsp;&nbsp;<div class="hero-overlay">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h1>Luxury. Performance. Heritage.</h1>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>Exclusive supercars curated by Menenti Motors</p>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroom.html" class="btn">Enter Showroom</a>
-&nbsp;&nbsp;&nbsp;&nbsp;</div>
-&nbsp;&nbsp;</section>
-&nbsp;&nbsp;<!-- FEATURED CARS -->
-&nbsp;&nbsp;<section class="featured">
-&nbsp;&nbsp;&nbsp;&nbsp;<h2>Featured Vehicles</h2>
-&nbsp;&nbsp;&nbsp;&nbsp;<div class="car-grid">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="car-card">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="pics/ferrari-purosangue.jpg" alt="Ferrari Purosangue">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h3>Ferrari Purosangue</h3>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>V12 • AWD • Ultra Luxury</p>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="car-card">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="pics/lamborghini-urus.jpg" alt="Lamborghini Urus">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h3>Lamborghini Urus</h3>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>Performance SUV • Twin Turbo V8</p>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="car-card">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="pics/porsche-gt3.jpg" alt="Porsche 911 GT3">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h3>Porsche 911 GT3</h3>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p>Track Focused • Naturally Aspirated</p>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-&nbsp;&nbsp;&nbsp;&nbsp;</div>
-&nbsp;&nbsp;</section>
-&nbsp;&nbsp;<!-- CONTACT -->
-&nbsp;&nbsp;<section id="contact" class="contact">
-&nbsp;&nbsp;&nbsp;&nbsp;<h2>Contact Us</h2>
-&nbsp;&nbsp;&nbsp;&nbsp;<p>For private viewings and serious inquiries</p>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:info@menentimotors.com" class="btn secondary">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Get in Touch
-&nbsp;&nbsp;&nbsp;&nbsp;</a>
-&nbsp;&nbsp;</section>
-&nbsp;&nbsp;<!-- FOOTER -->
-&nbsp;&nbsp;<footer>
-&nbsp;&nbsp;&nbsp;&nbsp;<p>© 2026 Menenti Motors. All rights reserved.</p>
-&nbsp;&nbsp;</footer>
-&nbsp;&nbsp;<!-- JAVASCRIPT -->
-&nbsp;&nbsp;<script src="js/security.js"></script>
-&nbsp;&nbsp;<script src="js/error-handler.js"></script>
-&nbsp;&nbsp;<script src="js/email-service.js"></script>
-&nbsp;&nbsp;<script src="js/lang.js"></script>
-&nbsp;&nbsp;<script src="js/auth.js"></script>
-&nbsp;&nbsp;<script src="js/chat.js"></script>
-&nbsp;&nbsp;<script src="js/admin.js"></script>
-&nbsp;&nbsp;<script src="js/index.js"></script>
+
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="./">
+        <div class="logo-mark">
+          <img src="pics/logo.jpg" alt="Menenti Motors Logo" width="56" height="56" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Menenti</span>
+          <span class="brand-sub">Motors</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Language selector (can be functional later) -->
+        <div class="lang-selector">
+          <div class="lang-current">EN ▾</div>
+        </div>
+
+        <button class="profile" aria-label="Profile">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="8" r="3.5" />
+            <path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <button class="hamburger" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-media">
+      <video class="hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="pics/ferrari-hero.mp4" type="video/mp4" />
+        <p>Your browser does not support the video tag.</p>
+      </video>
+    </div>
+    <div class="hero-overlay">
+      <h1 class="hero-title">When passion meets precision</h1>
+      <p class="hero-sub">Exclusive, curated performance vehicles — discover our latest collection.</p>
+      <a class="hero-cta" href="showroom.html">Explore the showroom</a>
+    </div>
+  </section>
+
+  <!-- SHOWROOM / FEATURED VEHICLES -->
+  <main class="showroom">
+    <header class="section-head">
+      <h2>New vehicles</h2>
+      <p class="muted">Selected models — click or hover for details</p>
+    </header>
+
+    <div class="grid">
+      <!-- Ferrari Purosangue -->
+      <article class="card">
+        <div class="card-media">
+          <img src="pics/ferrari-purosangue.jpg" alt="Ferrari Purosangue" />
+        </div>
+        <div class="card-body">
+          <h3 class="model">Ferrari Purosangue</h3>
+          <p class="specs">V12 • AWD • Ultra Luxury</p>
+          <div class="price-tag">€ 390,000+</div>
+        </div>
+      </article>
+
+      <!-- Lamborghini Urus -->
+      <article class="card">
+        <div class="card-media">
+          <img src="pics/lamborghini-urus.jpg" alt="Lamborghini Urus" />
+        </div>
+        <div class="card-body">
+          <h3 class="model">Lamborghini Urus</h3>
+          <p class="specs">Performance SUV • Twin Turbo V8</p>
+          <div class="price-tag">€ 220,000+</div>
+        </div>
+      </article>
+
+      <!-- Porsche 911 GT3 -->
+      <article class="card">
+        <div class="card-media">
+          <img src="pics/porsche-gt3.jpg" alt="Porsche 911 GT3" />
+        </div>
+        <div class="card-body">
+          <h3 class="model">Porsche 911 GT3</h3>
+          <p class="specs">Track Focused • Naturally Aspirated</p>
+          <div class="price-tag">€ 180,000+</div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <!-- CONTACT SECTION -->
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>For private viewings and serious inquiries</p>
+    <a href="mailto:info@menentimotors.com" class="hero-cta">Get in Touch</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>© Menenti Motors</div>
+      <div class="footer-links">
+        <a href="#">Privacy</a> · <a href="#">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- All your original scripts -->
+  <script src="js/security.js"></script>
+  <script src="js/error-handler.js"></script>
+  <script src="js/email-service.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/index.js"></script>
+
 </body>
 </html>
