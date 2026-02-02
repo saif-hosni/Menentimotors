@@ -1,4 +1,6 @@
-// Elements
+// Main site script - index.js
+
+// Elements (with safe checks)
 const navToggle = document.getElementById('navToggle');
 const sideNav = document.getElementById('sideNav');
 const sideClose = document.getElementById('sideClose');
@@ -6,7 +8,7 @@ const searchInput = document.getElementById('siteSearch');
 const searchClear = document.getElementById('searchClear');
 const vehicleGrid = document.getElementById('vehicleGrid');
 const lazyImgs = document.querySelectorAll('img.lazy');
-const navEl = document.querySelector('.nav'); // Fixed: define navEl
+const navEl = document.querySelector('.nav');
 
 // Side navigation toggle
 if (navToggle && sideNav) {
@@ -33,13 +35,14 @@ function closeSide() {
 
 // Click outside to close side panel
 window.addEventListener('click', (e) => {
-  if (sideNav && navToggle && !sideNav.contains(e.target) && !navToggle.contains(e.target)) {
+  if (sideNav && navToggle && 
+      !sideNav.contains(e.target) && 
+      !navToggle.contains(e.target)) {
     closeSide();
   }
 });
 
-// Combined search + category filtering (client-side)
-// Only enable if on showroom page and elements exist
+// Search + category filtering (only on showroom page)
 const isShowroom = !!vehicleGrid;
 const categoryBar = document.getElementById('categoryBar');
 const categoryButtons = categoryBar ? categoryBar.querySelectorAll('.category-btn') : [];
@@ -54,47 +57,37 @@ function updateVisibility() {
   allCards.forEach(card => {
     const cat = card.getAttribute('data-category') || 'all';
     const matchesCategory = (activeCategory === 'all') || (cat === activeCategory);
-    const text = (card.getAttribute('data-search') || card.innerText).toLowerCase();
+    const text = (card.getAttribute('data-search') || card.innerText || '').toLowerCase();
     const matchesSearch = !term || text.includes(term);
     card.style.display = (matchesCategory && matchesSearch) ? '' : 'none';
   });
 
-  // Highlight matches inside visible cards
   highlightMatches(term);
 }
 
-// Utility: escape regex special chars
 function escapeRegex(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Highlight matching substrings
 function highlightMatches(term) {
-  if (!vehicleGrid) return;
+  if (!vehicleGrid || !term) return;
 
-  const targetsSelector = '.card .model, .card .specs, .card .more';
-  const elems = vehicleGrid.querySelectorAll(targetsSelector);
-
-  elems.forEach(el => {
-    if (!el.dataset.original) el.dataset.original = el.textContent;
+  const targets = vehicleGrid.querySelectorAll('.card .model, .card .specs, .card .more');
+  targets.forEach(el => {
+    if (!el.dataset.original) el.dataset.original = el.textContent || '';
     const original = el.dataset.original;
-
-    if (!term) {
-      el.innerHTML = original;
-      return;
-    }
 
     try {
       const re = new RegExp(escapeRegex(term), 'ig');
       const highlighted = original.replace(re, match => `<span class="search-hit">${match}</span>`);
       el.innerHTML = highlighted;
-    } catch (e) {
+    } catch {
       el.innerHTML = original;
     }
   });
 }
 
-// Attach handlers only if on showroom page
+// Attach search/category listeners only if on showroom
 if (isShowroom) {
   if (searchInput) {
     searchInput.addEventListener('input', updateVisibility);
@@ -147,7 +140,7 @@ if ('IntersectionObserver' in window) {
 
   lazyImgs.forEach(img => io.observe(img));
 } else {
-  // Fallback
+  // Fallback: load all immediately
   lazyImgs.forEach(img => {
     const src = img.getAttribute('data-src');
     if (src) {
@@ -157,7 +150,7 @@ if ('IntersectionObserver' in window) {
   });
 }
 
-// Subtle parallax on mouse move for hero
+// Subtle parallax on hero (mouse move)
 const hero = document.querySelector('.hero');
 const heroMedia = document.querySelector('.hero-media');
 if (hero && heroMedia) {
@@ -177,19 +170,19 @@ if (hero && heroMedia) {
 const cards = document.querySelectorAll('.card');
 if (cards.length && 'IntersectionObserver' in window) {
   const reveal = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = 1;
-        e.target.style.transform = 'translateY(0)';
-        reveal.unobserve(e.target);
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        reveal.unobserve(entry.target);
       }
     });
   }, { threshold: 0.12 });
 
-  cards.forEach(c => {
-    c.style.opacity = 0;
-    c.style.transform = 'translateY(18px)';
-    reveal.observe(c);
+  cards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(18px)';
+    reveal.observe(card);
   });
 }
 
@@ -238,15 +231,17 @@ if (navEl) {
   // Touch fallback
   let touchStartY = null;
   window.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches && e.touches[0] ? e.touches[0].clientY : null;
+    touchStartY = e.touches?.[0]?.clientY ?? null;
   }, { passive: true });
 
   window.addEventListener('touchmove', (e) => {
     if (touchStartY === null) return;
-    const curY = e.touches && e.touches[0] ? e.touches[0].clientY : null;
+    const curY = e.touches?.[0]?.clientY ?? null;
     if (curY === null) return;
+
     const dy = touchStartY - curY;
     if (Math.abs(dy) < MIN_DELTA) return;
+
     if (dy > 0 && window.scrollY > 80) {
       navEl.classList.add('nav--hidden');
     } else {
