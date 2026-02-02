@@ -1,5 +1,4 @@
-// Email Service - Simulates email sending and management
-// In production, replace with real email provider (SendGrid, AWS SES, etc.)
+// Email Service - Simulated for GitHub Pages
 class EmailService {
   constructor() {
     this.sentEmails = this.loadSentEmails();
@@ -11,66 +10,79 @@ class EmailService {
   init() {
     // Clean up expired items on startup
     this.cleanupExpired();
+    
+    // For demo, we'll check every 5 minutes instead of 24 hours
+    setInterval(() => {
+      this.cleanupExpired();
+    }, 5 * 60 * 1000); // 5 minutes
   }
 
-  // Load / save helpers
+  // Load sent emails from storage
   loadSentEmails() {
     try {
-      const data = localStorage.getItem('sentEmails');
-      return data ? JSON.parse(data) : [];
-    } catch {
+      const emails = localStorage.getItem('sentEmails');
+      return emails ? JSON.parse(emails) : [];
+    } catch (e) {
+      console.warn('Failed to load sent emails:', e);
       return [];
     }
   }
 
+  // Save sent emails to storage
   saveSentEmails() {
     try {
       localStorage.setItem('sentEmails', JSON.stringify(this.sentEmails));
     } catch (e) {
-      console.error('Failed to save sent emails:', e);
+      console.error('Error saving sent emails:', e);
     }
   }
 
+  // Load pending verifications
   loadPendingVerifications() {
     try {
-      const data = localStorage.getItem('pendingVerifications');
-      return data ? JSON.parse(data) : {};
-    } catch {
+      const verifications = localStorage.getItem('pendingVerifications');
+      return verifications ? JSON.parse(verifications) : {};
+    } catch (e) {
+      console.warn('Failed to load pending verifications:', e);
       return {};
     }
   }
 
+  // Save pending verifications
   savePendingVerifications() {
     try {
       localStorage.setItem('pendingVerifications', JSON.stringify(this.pendingVerifications));
     } catch (e) {
-      console.error('Failed to save verifications:', e);
+      console.error('Error saving pending verifications:', e);
     }
   }
 
+  // Load pending password resets
   loadPendingResets() {
     try {
-      const data = localStorage.getItem('pendingResets');
-      return data ? JSON.parse(data) : {};
-    } catch {
+      const resets = localStorage.getItem('pendingResets');
+      return resets ? JSON.parse(resets) : {};
+    } catch (e) {
+      console.warn('Failed to load pending resets:', e);
       return {};
     }
   }
 
+  // Save pending password resets
   savePendingResets() {
     try {
       localStorage.setItem('pendingResets', JSON.stringify(this.pendingResets));
     } catch (e) {
-      console.error('Failed to save resets:', e);
+      console.error('Error saving pending resets:', e);
     }
   }
 
-  // Generate 6-digit verification code
+  // Generate verification code
   generateVerificationCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
   }
 
-  // Generate secure reset token
+  // Generate password reset token
   generateResetToken() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let token = '';
@@ -80,32 +92,32 @@ class EmailService {
     return token;
   }
 
-  // Send verification "email" (simulated)
+  // Send verification email (simulated)
   sendVerificationEmail(email, code) {
     const emailData = {
       to: email,
       subject: 'Verify Your Email - Menenti Motors',
       type: 'verification',
-      code,
+      code: code,
       sentAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString() // 15 min
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString() // 15 minutes
     };
 
-    // Store verification
+    // Store in pending verifications
     this.pendingVerifications[email] = {
-      code,
+      code: code,
       expiresAt: emailData.expiresAt,
       attempts: 0
     };
     this.savePendingVerifications();
 
-    // Store in sent log
+    // Store in sent emails
     this.sentEmails.push(emailData);
     this.saveSentEmails();
 
-    // In real app: send actual email here
-    // For demo: just log to console (no popup anymore)
-    console.log(`[EMAIL] Verification code for ${email}: ${code}`);
+    // For GitHub Pages demo - show code in alert
+    console.log(`[EMAIL SERVICE] Verification code for ${email}: ${code}`);
+    alert(`Verification code sent to ${email}:\n${code}\n\n(This is simulated - in production, check your real email)`);
 
     return true;
   }
@@ -113,49 +125,49 @@ class EmailService {
   // Verify code
   verifyCode(email, code) {
     const verification = this.pendingVerifications[email];
-
+    
     if (!verification) {
-      return { valid: false, message: 'No verification code found.' };
+      return { valid: false, message: 'No verification code found for this email.' };
     }
 
     if (new Date() > new Date(verification.expiresAt)) {
       delete this.pendingVerifications[email];
       this.savePendingVerifications();
-      return { valid: false, message: 'Code expired. Request a new one.' };
+      return { valid: false, message: 'Verification code has expired. Please request a new one.' };
     }
 
     if (verification.attempts >= 5) {
       delete this.pendingVerifications[email];
       this.savePendingVerifications();
-      return { valid: false, message: 'Too many failed attempts. Request a new code.' };
+      return { valid: false, message: 'Too many failed attempts. Please request a new verification code.' };
     }
 
     if (verification.code !== code) {
       verification.attempts++;
       this.savePendingVerifications();
-      return { valid: false, message: 'Invalid code. Try again.' };
+      return { valid: false, message: 'Invalid verification code. Please try again.' };
     }
 
-    // Success
+    // Code is valid
     delete this.pendingVerifications[email];
     this.savePendingVerifications();
     return { valid: true };
   }
 
-  // Send password reset "email" (simulated)
+  // Send password reset email (simulated)
   sendPasswordResetEmail(email) {
     const users = this.getUsers();
     const user = users.find(u => u.email === email);
 
-    // Don't reveal if user exists (security best practice)
     if (!user) {
-      return { success: true, message: 'If an account exists, a reset link was sent.' };
+      // Don't reveal if user exists (security best practice)
+      return { success: true, message: 'If an account exists with this email, a password reset link has been sent.' };
     }
 
     const token = this.generateResetToken();
     const resetData = {
-      email,
-      token,
+      email: email,
+      token: token,
       expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString(), // 1 hour
       used: false
     };
@@ -167,42 +179,42 @@ class EmailService {
       to: email,
       subject: 'Reset Your Password - Menenti Motors',
       type: 'password_reset',
-      token,
+      token: token,
       sentAt: new Date().toISOString()
     };
 
     this.sentEmails.push(emailData);
     this.saveSentEmails();
 
-    // In real app: send email with link
-    // For demo: log to console
-    console.log(`[EMAIL] Password reset token for ${email}: ${token}`);
+    // For GitHub Pages demo - show token in alert
+    console.log(`[EMAIL SERVICE] Password reset token for ${email}: ${token}`);
+    alert(`Password reset token for ${email}:\n${token}\n\n(Use this token in the reset password form)`);
 
-    return { success: true, message: 'Reset link sent (check console for demo token).', token };
+    return { success: true, message: 'Password reset email sent.', token: token };
   }
 
   // Verify reset token
   verifyResetToken(token) {
     const reset = this.pendingResets[token];
-
+    
     if (!reset) {
-      return { valid: false, message: 'Invalid or expired token.' };
+      return { valid: false, message: 'Invalid or expired reset token.' };
     }
 
     if (reset.used) {
-      return { valid: false, message: 'Token already used.' };
+      return { valid: false, message: 'This reset token has already been used.' };
     }
 
     if (new Date() > new Date(reset.expiresAt)) {
       delete this.pendingResets[token];
       this.savePendingResets();
-      return { valid: false, message: 'Token expired. Request a new one.' };
+      return { valid: false, message: 'Reset token has expired. Please request a new one.' };
     }
 
     return { valid: true, email: reset.email };
   }
 
-  // Mark token as used
+  // Use reset token (mark as used)
   useResetToken(token) {
     if (this.pendingResets[token]) {
       this.pendingResets[token].used = true;
@@ -210,20 +222,32 @@ class EmailService {
     }
   }
 
-  // Helper: get all users
+  // Get users (helper method)
   getUsers() {
     try {
-      const data = localStorage.getItem('users');
-      return data ? JSON.parse(data) : [];
-    } catch {
+      const usersStr = localStorage.getItem('users');
+      return usersStr ? JSON.parse(usersStr) : [];
+    } catch (e) {
       return [];
+    }
+  }
+
+  // Update user last activity
+  updateUserActivity(userId) {
+    const users = this.getUsers();
+    const user = users.find(u => u.id === userId);
+    
+    if (user) {
+      user.lastActivity = new Date().toISOString();
+      localStorage.setItem('users', JSON.stringify(users));
     }
   }
 
   // Clean up expired verifications and resets
   cleanupExpired() {
     const now = new Date();
-
+    
+    // Clean expired verifications
     Object.keys(this.pendingVerifications).forEach(email => {
       if (new Date(this.pendingVerifications[email].expiresAt) < now) {
         delete this.pendingVerifications[email];
@@ -231,6 +255,7 @@ class EmailService {
     });
     this.savePendingVerifications();
 
+    // Clean expired resets
     Object.keys(this.pendingResets).forEach(token => {
       if (new Date(this.pendingResets[token].expiresAt) < now) {
         delete this.pendingResets[token];
@@ -240,5 +265,5 @@ class EmailService {
   }
 }
 
-// Initialize
+// Initialize email service
 const emailService = new EmailService();
