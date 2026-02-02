@@ -4,10 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Menenti Motors — Showroom</title>
-
   <!-- Google font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
-
   <!-- main stylesheet -->
   <link rel="stylesheet" href="css/index.css">
 </head>
@@ -24,7 +22,6 @@
           <span class="brand-sub">Motors</span>
         </div>
       </a>
-
       <nav class="nav-actions">
         <div class="lang-selector">
           <div class="lang-current" id="langCurrent">EN ▾</div>
@@ -39,19 +36,16 @@
             <div class="lang-option" data-lang="es">Español</div>
           </div>
         </div>
-
         <button id="profileBtn" class="profile" aria-label="Open profile" data-i18n-aria="aria.openProfile">
           <svg class="icon icon-profile" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <circle cx="12" cy="8" r="3.5" fill="currentColor" />
             <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
-
         <button id="navToggle" class="hamburger" aria-label="Open navigation" data-i18n-aria="aria.openNav">☰</button>
       </nav>
     </div>
   </header>
-
   <!-- SIDE NAV (sliding panel) -->
   <aside id="sideNav" class="side-nav" aria-hidden="true">
     <div class="side-inner">
@@ -63,7 +57,6 @@
         <li><a href="#" id="requestVehicleLink" data-i18n="nav.request">Request vehicle</a></li>
         <li><a href="Aboutus.html" data-i18n="nav.about">About Us</a></li>
       </ul>
-
       <div class="side-social">
         <a href="https://www.instagram.com/menentimotors/" aria-label="Instagram">Instagram</a>
         <a href="#" aria-label="LinkedIn">LinkedIn</a>
@@ -71,7 +64,6 @@
       </div>
     </div>
   </aside>
-
   <!-- HERO -->
   <section class="hero">
     <div class="hero-media" role="img" aria-label="Luxury car background" data-i18n-aria="aria.luxuryCar">
@@ -86,14 +78,12 @@
       <a class="hero-cta" href="showroom.html" data-i18n="hero.cta">Explore the showroom</a>
     </div>
   </section>
-
   <!-- SHOWROOM GRID -->
   <main id="showroom" class="showroom">
     <header class="section-head">
       <h2 data-i18n="showroom.title">New vehicles</h2>
       <p class="muted" data-i18n="showroom.subtitle">Selected models — click or hover for details</p>
     </header>
-
     <div class="grid" id="vehicleGrid">
       <!-- Card 1 -->
       <article class="card" data-search="ferrari purosangue 650hp red">
@@ -140,7 +130,6 @@
           <div class="price-tag">€ 520,000</div>
         </div>
       </article>
-
       <!-- Card 2 -->
       <article class="card" data-search="aston martin dbr22 v12 carbon black">
         <div class="card-media">
@@ -186,7 +175,6 @@
           <div class="price-tag">€ 1,200,000</div>
         </div>
       </article>
-
       <!-- Card 3 -->
       <article class="card" data-search="porsche carrera gt 700hp silver">
         <div class="card-media">
@@ -234,7 +222,6 @@
       </article>
     </div>
   </main>
-
   <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
@@ -244,10 +231,9 @@
   </footer>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="auth-modal" aria-hidden="true">
+  <div id="authModal" class="auth-modal" aria-hidden="true" style="display:none;">
     <div class="auth-modal-content">
       <button class="auth-close" id="authClose">✕</button>
-
       <!-- Sign In Form -->
       <div id="signInForm" class="auth-form active">
         <h2 data-i18n="auth.signIn">Sign In</h2>
@@ -268,7 +254,6 @@
           </p>
         </form>
       </div>
-
       <!-- Forgot Password Form -->
       <div id="forgotPasswordForm" class="auth-form">
         <h2>Reset Password</h2>
@@ -283,7 +268,6 @@
           </p>
         </form>
       </div>
-
       <!-- Reset Password Form -->
       <div id="resetPasswordForm" class="auth-form">
         <h2>Set New Password</h2>
@@ -306,7 +290,6 @@
           </p>
         </form>
       </div>
-
       <!-- Email Verification Form -->
       <div id="verifyEmailForm" class="auth-form">
         <h2>Verify Your Email</h2>
@@ -324,7 +307,6 @@
           </p>
         </form>
       </div>
-
       <!-- Sign Up Form -->
       <div id="signUpForm" class="auth-form">
         <h2 data-i18n="auth.signUp">Sign Up</h2>
@@ -352,7 +334,6 @@
           </p>
         </form>
       </div>
-
       <!-- User Profile (when logged in) -->
       <div id="userProfile" class="auth-form">
         <h2 data-i18n="auth.profile">Profile</h2>
@@ -381,7 +362,6 @@
         </div>
         <button class="chat-close" id="chatClose">✕</button>
       </div>
-
       <div class="chat-messages" id="chatMessages">
         <div class="chat-message chat-message-bot">
           <div class="message-avatar">
@@ -396,7 +376,6 @@
           </div>
         </div>
       </div>
-
       <div class="chat-input-container">
         <form id="chatForm" class="chat-form">
           <input type="text" id="chatInput" placeholder="Type your message..." data-i18n-placeholder="chat.placeholder" autocomplete="off">
@@ -418,7 +397,6 @@
   <script src="js/lang.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/chat.js"></script>
-
   <!-- ERROR MODAL -->
   <div id="errorModal" class="error-modal" aria-hidden="true" style="display:none;">
     <div class="error-modal-content">
@@ -431,7 +409,6 @@
       </div>
     </div>
   </div>
-
   <!-- Request modal (user) -->
   <div id="requestModal" class="admin-modal" aria-hidden="true" style="display:none;">
     <div class="admin-modal-content">
@@ -465,9 +442,7 @@
       </form>
     </div>
   </div>
-
   <script src="js/admin.js"></script>
   <script src="js/index.js"></script>
-
 </body>
 </html>
