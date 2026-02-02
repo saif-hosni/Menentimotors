@@ -377,7 +377,7 @@
     </div>
   </main>
 
-  <!-- FOOTER -->
+ <!-- FOOTER -->
   <footer class="site-footer">
     <div class="footer-inner">
       <div>© Menenti Motors</div>
@@ -386,10 +386,9 @@
   </footer>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="auth-modal" aria-hidden="true">
+  <div id="authModal" class="auth-modal" aria-hidden="true" style="display:none;">
     <div class="auth-modal-content">
       <button class="auth-close" id="authClose">✕</button>
-      
       <!-- Sign In Form -->
       <div id="signInForm" class="auth-form active">
         <h2 data-i18n="auth.signIn">Sign In</h2>
@@ -410,7 +409,6 @@
           </p>
         </form>
       </div>
-
       <!-- Forgot Password Form -->
       <div id="forgotPasswordForm" class="auth-form">
         <h2>Reset Password</h2>
@@ -425,7 +423,6 @@
           </p>
         </form>
       </div>
-
       <!-- Reset Password Form -->
       <div id="resetPasswordForm" class="auth-form">
         <h2>Set New Password</h2>
@@ -448,7 +445,6 @@
           </p>
         </form>
       </div>
-
       <!-- Email Verification Form -->
       <div id="verifyEmailForm" class="auth-form">
         <h2>Verify Your Email</h2>
@@ -466,7 +462,6 @@
           </p>
         </form>
       </div>
-
       <!-- Sign Up Form -->
       <div id="signUpForm" class="auth-form">
         <h2 data-i18n="auth.signUp">Sign Up</h2>
@@ -494,7 +489,6 @@
           </p>
         </form>
       </div>
-
       <!-- User Profile (when logged in) -->
       <div id="userProfile" class="auth-form">
         <h2 data-i18n="auth.profile">Profile</h2>
@@ -513,7 +507,64 @@
     </div>
   </div>
 
-  <!-- REQUEST MODAL (user) -->
+  <!-- CHAT MODAL -->
+  <div id="chatModal" class="chat-modal" aria-hidden="true">
+    <div class="chat-modal-content">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <h3 data-i18n="chat.title">Contact Us</h3>
+          <p class="chat-status" data-i18n="chat.online">Online</p>
+        </div>
+        <button class="chat-close" id="chatClose">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-message chat-message-bot">
+          <div class="message-avatar">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="8" r="3.5" />
+              <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="message-content">
+            <p data-i18n="chat.welcome">Hello! How can we help you today?</p>
+            <span class="message-time"></span>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <form id="chatForm" class="chat-form">
+          <input type="text" id="chatInput" placeholder="Type your message..." data-i18n-placeholder="chat.placeholder" autocomplete="off">
+          <button type="submit" class="chat-send-btn" aria-label="Send message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/security.js"></script>
+  <script src="js/error-handler.js"></script>
+  <script src="js/email-service.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <!-- ERROR MODAL -->
+  <div id="errorModal" class="error-modal" aria-hidden="true" style="display:none;">
+    <div class="error-modal-content">
+      <div class="error-icon">⚠️</div>
+      <h2 class="error-title">Notice</h2>
+      <p class="error-message" id="errorMessage">An error occurred.</p>
+      <div class="error-actions">
+        <button id="errorClose" class="btn-primary">OK</button>
+        <button id="errorActionBtn" class="btn-secondary" style="display:none;">Sign In</button>
+      </div>
+    </div>
+  </div>
+  <!-- Request modal (user) -->
   <div id="requestModal" class="admin-modal" aria-hidden="true" style="display:none;">
     <div class="admin-modal-content">
       <button class="admin-close" id="requestClose">✕</button>
@@ -546,159 +597,7 @@
       </form>
     </div>
   </div>
-
-  <!-- REQUESTS MODAL (admin view) -->
-  <div id="requestsModal" class="admin-modal" aria-hidden="true" style="display:none;">
-    <div class="admin-modal-content">
-      <button class="admin-close" id="requestsClose">✕</button>
-      <h2>Vehicle Requests</h2>
-      <div id="requestsList" style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
-        <!-- Requests will be injected here -->
-      </div>
-    </div>
-  </div>
-
-  <!-- CHAT MODAL -->
-  <div id="chatModal" class="chat-modal" aria-hidden="true">
-    <div class="chat-modal-content">
-      <div class="chat-header">
-        <div class="chat-header-info">
-          <h3 data-i18n="chat.title">Contact Us</h3>
-          <p class="chat-status" data-i18n="chat.online">Online</p>
-        </div>
-        <button class="chat-close" id="chatClose">✕</button>
-      </div>
-      
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-message chat-message-bot">
-          <div class="message-avatar">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="8" r="3.5" />
-              <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </div>
-          <div class="message-content">
-            <p data-i18n="chat.welcome">Hello! How can we help you today?</p>
-            <span class="message-time"></span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="chat-input-container">
-        <form id="chatForm" class="chat-form">
-          <input type="text" id="chatInput" placeholder="Type your message..." data-i18n-placeholder="chat.placeholder" autocomplete="off">
-          <button type="submit" class="chat-send-btn" aria-label="Send message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- ERROR MODAL -->
-  <div id="errorModal" class="error-modal" aria-hidden="true" style="display:none;">
-    <div class="error-modal-content">
-      <div class="error-icon">⚠️</div>
-      <h2 class="error-title">Notice</h2>
-      <p class="error-message" id="errorMessage">An error occurred.</p>
-      <div class="error-actions">
-        <button id="errorClose" class="btn-primary">OK</button>
-        <button id="errorActionBtn" class="btn-secondary" style="display:none;">Sign In</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CONFIRMATION MODAL -->
-  <div id="confirmModal" class="confirm-modal" aria-hidden="true" style="display:none;">
-    <div class="confirm-modal-content">
-      <div class="confirm-icon">⚠️</div>
-      <h2 class="confirm-title">Confirm Deletion</h2>
-      <p class="confirm-message" id="confirmMessage">Are you sure you want to delete this item as admin?</p>
-      <div class="confirm-actions">
-        <button id="confirmCancel" class="btn-secondary">Cancel</button>
-        <button id="confirmDelete" class="btn-danger">Delete</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADMIN MODAL -->
-  <div id="adminModal" class="admin-modal" aria-hidden="true" style="display:none;">
-    <div class="admin-modal-content">
-      <button class="admin-close" id="adminClose">✕</button>
-      <h2>Manage Vehicle</h2>
-      <form id="adminVehicleForm" class="admin-vehicle-form">
-        <div class="form-group">
-          <label>Make</label>
-          <input type="text" id="vehicleMake" placeholder="e.g., Ferrari" required>
-        </div>
-        <div class="form-group">
-          <label>Model</label>
-          <input type="text" id="vehicleModel" placeholder="e.g., Purosangue" required>
-        </div>
-        <div class="form-group">
-          <label>Category</label>
-          <select id="vehicleCategory" required>
-            <option value="">Select category</option>
-            <option value="ferrari">Ferrari</option>
-            <option value="aston-martin">Aston Martin</option>
-            <option value="porsche">Porsche</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Specs</label>
-          <input type="text" id="vehicleSpecs" placeholder="e.g., 650 HP • 0–100 km/h 3.3s" required>
-        </div>
-        <div class="form-group">
-          <label>Year</label>
-          <input type="number" id="vehicleYear" placeholder="2024" required>
-        </div>
-        <div class="form-group">
-          <label>Price (€)</label>
-          <input type="number" id="vehiclePrice" placeholder="520000" required>
-        </div>
-        <div class="form-group">
-          <label>Image URL</label>
-          <input type="text" id="vehicleImage" placeholder="../pics/ferrari-purosangue.jpg">
-        </div>
-        <div class="form-group">
-          <label>Search Tags</label>
-          <input type="text" id="vehicleSearch" placeholder="ferrari purosangue 650hp red">
-        </div>
-        <div class="form-group">
-          <label>Engine</label>
-          <input type="text" id="vehicleEngine" placeholder="6.5L V12">
-        </div>
-        <div class="form-group">
-          <label>Horsepower</label>
-          <input type="text" id="vehicleHP" placeholder="715 HP">
-        </div>
-        <div class="form-group">
-          <label>0-60 mph</label>
-          <input type="text" id="vehicle060" placeholder="3.1 sec">
-        </div>
-        <div class="form-group">
-          <label>Top Speed</label>
-          <input type="text" id="vehicleTopSpeed" placeholder="193 mph">
-        </div>
-        <div class="admin-form-actions">
-          <button type="submit" class="btn-primary">Save Vehicle</button>
-          <button type="button" id="deleteVehicleBtn" class="btn-danger" style="display:none;">Delete Vehicle</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <script src="../js/security.js"></script>
-  <script src="../js/error-handler.js"></script>
-  <script src="../js/email-service.js"></script>
-  <script src="../js/lang.js"></script>
-  <script src="../js/auth.js"></script>
-  <script src="../js/chat.js"></script>
-  <script src="../js/admin.js"></script>
-  <script src="../js/index.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
