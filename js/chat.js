@@ -111,7 +111,7 @@ class Chat {
 
     container.innerHTML = '';
 
-    // Add welcome message
+    // Welcome message
     this.addMessage("Hello! How can we help you today?", 'bot');
 
     this.messages.forEach(msg => this.renderMessage(msg));
@@ -176,7 +176,6 @@ class Chat {
 
     document.getElementById('chatSignInBtn')?.addEventListener('click', () => {
       this.closeChat();
-      // Open auth modal if it exists
       const authModal = document.getElementById('authModal');
       if (authModal) {
         authModal.style.display = 'flex';
@@ -200,17 +199,17 @@ class Chat {
   }
 
   setupEventListeners() {
-    // Find ALL possible Contact Us links
+    // Catch all possible "Contact Us" links
     const contactLinks = document.querySelectorAll(
       '#contactUsLink, a[data-i18n="nav.contact"], [data-i18n="nav.contact"]'
     );
 
-    console.log('Found Contact Us links:', contactLinks.length); // Debug
+    console.log('Found Contact Us links:', contactLinks.length);
 
     contactLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Contact Us clicked – opening chat'); // Debug
+        console.log('Contact Us clicked – opening chat');
         this.openChat();
       });
     });
@@ -249,5 +248,5 @@ class Chat {
   }
 }
 
-// Initialize chat
+// Initialize
 const chat = new Chat();
