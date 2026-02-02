@@ -1,11 +1,11 @@
-// Chat System
+// Chat System - COMPLETELY FIXED VERSION
 class Chat {
   constructor() {
     this.messages = this.loadMessages();
     this.init();
   }
 
-  // ADD THIS MISSING METHOD:
+  // Load messages from localStorage
   loadMessages() {
     try {
       const saved = localStorage.getItem('chatMessages');
@@ -16,7 +16,7 @@ class Chat {
     }
   }
 
-  // ADD THIS METHOD TOO (for saving messages):
+  // Save messages to localStorage
   saveMessages() {
     try {
       localStorage.setItem('chatMessages', JSON.stringify(this.messages));
@@ -25,7 +25,7 @@ class Chat {
     }
   }
 
-  // Add a new message
+  // Add a new message (FIXED: No circular dependency)
   addMessage(text, sender = 'user') {
     const message = {
       id: Date.now(),
@@ -42,12 +42,13 @@ class Chat {
     // Generate bot response if user sent message
     if (sender === 'user') {
       setTimeout(() => {
+        // Call generateBotResponse directly, not through addMessage
         this.generateBotResponse(text);
       }, 1000);
     }
   }
 
-  // Generate bot response
+  // Generate bot response (FIXED: Directly creates message)
   generateBotResponse(userMessage) {
     let response = "Thank you for your message. Our team will get back to you soon.";
     
@@ -65,7 +66,18 @@ class Chat {
       response = "Hello! How can I assist you today?";
     }
     
-    this.addMessage(response, 'bot');
+    // DIRECTLY create bot message without calling addMessage
+    const botMessage = {
+      id: Date.now() + 1,
+      text: response,
+      sender: 'bot',
+      time: new Date().toISOString()
+    };
+    
+    this.messages.push(botMessage);
+    this.saveMessages();
+    this.renderMessage(botMessage);
+    this.scrollToBottom();
   }
 
   // Render a single message
@@ -163,7 +175,7 @@ class Chat {
     this.scrollToBottom();
   }
 
-  // NEW: Show sign-in prompt without destroying the chat structure
+  // Show sign-in prompt without destroying the chat structure
   showSignInPrompt() {
     const modal = document.getElementById('chatModal');
     if (!modal) return;
@@ -211,7 +223,7 @@ class Chat {
     }
   }
 
-  // NEW: Hide sign-in prompt and show chat
+  // Hide sign-in prompt and show chat
   hideSignInPrompt() {
     const overlay = document.querySelector('.sign-in-overlay');
     if (overlay) overlay.style.display = 'none';
