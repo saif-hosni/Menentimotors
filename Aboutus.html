@@ -20,7 +20,7 @@
       <a class="brand" href="index.html">
         <div class="logo-mark" aria-hidden="true">
           <!-- logo (updated) -->
-          <img src="../pics/logo.jpg" width="56" height="56" alt="Menenti Motors Logo">
+          <img src="pics/logo.jpg" width="56" height="56" alt="Menenti Motors Logo">
         </div>
         <div class="brand-text">
           <span class="brand-name">Menenti</span>
@@ -84,10 +84,9 @@
   </footer>
 
   <!-- AUTH MODAL -->
-  <div id="authModal" class="auth-modal" aria-hidden="true">
+  <div id="authModal" class="auth-modal" aria-hidden="true" style="display:none;">
     <div class="auth-modal-content">
       <button class="auth-close" id="authClose">✕</button>
-      
       <!-- Sign In Form -->
       <div id="signInForm" class="auth-form active">
         <h2 data-i18n="auth.signIn">Sign In</h2>
@@ -108,7 +107,6 @@
           </p>
         </form>
       </div>
-
       <!-- Forgot Password Form -->
       <div id="forgotPasswordForm" class="auth-form">
         <h2>Reset Password</h2>
@@ -123,7 +121,6 @@
           </p>
         </form>
       </div>
-
       <!-- Reset Password Form -->
       <div id="resetPasswordForm" class="auth-form">
         <h2>Set New Password</h2>
@@ -146,7 +143,6 @@
           </p>
         </form>
       </div>
-
       <!-- Email Verification Form -->
       <div id="verifyEmailForm" class="auth-form">
         <h2>Verify Your Email</h2>
@@ -164,7 +160,6 @@
           </p>
         </form>
       </div>
-
       <!-- Sign Up Form -->
       <div id="signUpForm" class="auth-form">
         <h2 data-i18n="auth.signUp">Sign Up</h2>
@@ -192,7 +187,6 @@
           </p>
         </form>
       </div>
-
       <!-- User Profile (when logged in) -->
       <div id="userProfile" class="auth-form">
         <h2 data-i18n="auth.profile">Profile</h2>
@@ -221,7 +215,6 @@
         </div>
         <button class="chat-close" id="chatClose">✕</button>
       </div>
-      
       <div class="chat-messages" id="chatMessages">
         <div class="chat-message chat-message-bot">
           <div class="message-avatar">
@@ -236,7 +229,6 @@
           </div>
         </div>
       </div>
-      
       <div class="chat-input-container">
         <form id="chatForm" class="chat-form">
           <input type="text" id="chatInput" placeholder="Type your message..." data-i18n-placeholder="chat.placeholder" autocomplete="off">
@@ -251,60 +243,59 @@
     </div>
   </div>
 
-      <script src="../js/security.js"></script>
-      <script src="../js/error-handler.js"></script>
-      <script src="../js/email-service.js"></script>
-      <script src="../js/lang.js"></script>
-      <script src="../js/auth.js"></script>
-      <script src="../js/chat.js"></script>
-      <!-- ERROR MODAL -->
-      <div id="errorModal" class="error-modal" aria-hidden="true" style="display:none;">
-        <div class="error-modal-content">
-          <div class="error-icon">⚠️</div>
-          <h2 class="error-title">Notice</h2>
-          <p class="error-message" id="errorMessage">An error occurred.</p>
-          <div class="error-actions">
-            <button id="errorClose" class="btn-primary">OK</button>
-            <button id="errorActionBtn" class="btn-secondary" style="display:none;">Sign In</button>
-          </div>
-        </div>
+  <!-- Scripts -->
+  <script src="js/security.js"></script>
+  <script src="js/error-handler.js"></script>
+  <script src="js/email-service.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/chat.js"></script>
+  <!-- ERROR MODAL -->
+  <div id="errorModal" class="error-modal" aria-hidden="true" style="display:none;">
+    <div class="error-modal-content">
+      <div class="error-icon">⚠️</div>
+      <h2 class="error-title">Notice</h2>
+      <p class="error-message" id="errorMessage">An error occurred.</p>
+      <div class="error-actions">
+        <button id="errorClose" class="btn-primary">OK</button>
+        <button id="errorActionBtn" class="btn-secondary" style="display:none;">Sign In</button>
       </div>
-
-      <!-- Request modal (user) -->
-      <div id="requestModal" class="admin-modal" aria-hidden="true" style="display:none;">
-        <div class="admin-modal-content">
-          <button class="admin-close" id="requestClose">✕</button>
-          <h2>Request a Vehicle</h2>
-          <form id="requestForm" class="admin-vehicle-form">
-            <div class="form-group">
-              <label>Your name</label>
-              <input type="text" id="reqName" placeholder="Full name" required>
-            </div>
-            <div class="form-group">
-              <label>Contact (email or phone)</label>
-              <input type="text" id="reqContact" placeholder="you@example.com or +123456789" required>
-            </div>
-            <div class="form-group">
-              <label>Make</label>
-              <input type="text" id="reqMake" placeholder="e.g., Ferrari">
-            </div>
-            <div class="form-group">
-              <label>Model</label>
-              <input type="text" id="reqModel" placeholder="e.g., Purosangue">
-            </div>
-            <div class="form-group">
-              <label>Message / Details</label>
-              <textarea id="reqMessage" placeholder="Any additional information" rows="4"></textarea>
-            </div>
-            <div class="admin-form-actions">
-              <button type="submit" class="btn-primary">Send Request</button>
-              <button type="button" id="requestCancel" class="btn-danger">Cancel</button>
-            </div>
-          </form>
+    </div>
+  </div>
+  <!-- Request modal (user) -->
+  <div id="requestModal" class="admin-modal" aria-hidden="true" style="display:none;">
+    <div class="admin-modal-content">
+      <button class="admin-close" id="requestClose">✕</button>
+      <h2>Request a Vehicle</h2>
+      <form id="requestForm" class="admin-vehicle-form">
+        <div class="form-group">
+          <label>Your name</label>
+          <input type="text" id="reqName" placeholder="Full name" required>
         </div>
-      </div>
-
-      <script src="../js/admin.js"></script>
-      <script src="../js/index.js"></script>
+        <div class="form-group">
+          <label>Contact (email or phone)</label>
+          <input type="text" id="reqContact" placeholder="you@example.com or +123456789" required>
+        </div>
+        <div class="form-group">
+          <label>Make</label>
+          <input type="text" id="reqMake" placeholder="e.g., Ferrari">
+        </div>
+        <div class="form-group">
+          <label>Model</label>
+          <input type="text" id="reqModel" placeholder="e.g., Purosangue">
+        </div>
+        <div class="form-group">
+          <label>Message / Details</label>
+          <textarea id="reqMessage" placeholder="Any additional information" rows="4"></textarea>
+        </div>
+        <div class="admin-form-actions">
+          <button type="submit" class="btn-primary">Send Request</button>
+          <button type="button" id="requestCancel" class="btn-danger">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="js/admin.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
