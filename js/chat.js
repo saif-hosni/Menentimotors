@@ -5,7 +5,135 @@ class Chat {
     this.init();
   }
 
-  // ... (loadMessages, saveMessages, addMessage, generateBotResponse, renderMessage, formatTime, scrollToBottom stay the same)
+  // ADD THIS MISSING METHOD:
+  loadMessages() {
+    try {
+      const saved = localStorage.getItem('chatMessages');
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      return [];
+    }
+  }
+
+  // ADD THIS METHOD TOO (for saving messages):
+  saveMessages() {
+    try {
+      localStorage.setItem('chatMessages', JSON.stringify(this.messages));
+    } catch (error) {
+      console.error('Error saving messages:', error);
+    }
+  }
+
+  // Add a new message
+  addMessage(text, sender = 'user') {
+    const message = {
+      id: Date.now(),
+      text,
+      sender,
+      time: new Date().toISOString()
+    };
+    
+    this.messages.push(message);
+    this.saveMessages();
+    this.renderMessage(message);
+    this.scrollToBottom();
+
+    // Generate bot response if user sent message
+    if (sender === 'user') {
+      setTimeout(() => {
+        this.generateBotResponse(text);
+      }, 1000);
+    }
+  }
+
+  // Generate bot response
+  generateBotResponse(userMessage) {
+    let response = "Thank you for your message. Our team will get back to you soon.";
+    
+    const lowerMsg = userMessage.toLowerCase();
+    
+    if (lowerMsg.includes('price') || lowerMsg.includes('cost') || lowerMsg.includes('€')) {
+      response = "For pricing details on specific vehicles, please visit our showroom or contact our sales team directly.";
+    } else if (lowerMsg.includes('available') || lowerMsg.includes('stock')) {
+      response = "Our inventory is constantly updated. Check the showroom page for current availability.";
+    } else if (lowerMsg.includes('test drive') || lowerMsg.includes('drive')) {
+      response = "Test drives can be arranged by appointment. Please contact us to schedule one.";
+    } else if (lowerMsg.includes('contact') || lowerMsg.includes('email') || lowerMsg.includes('phone')) {
+      response = "You can reach us at info@menentimotors.com or call +39 123 456 7890.";
+    } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
+      response = "Hello! How can I assist you today?";
+    }
+    
+    this.addMessage(response, 'bot');
+  }
+
+  // Render a single message
+  renderMessage(message) {
+    const container = document.getElementById('chatMessages');
+    if (!container) return;
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message chat-message-${message.sender}`;
+    
+    const time = new Date(message.time);
+    const formattedTime = this.formatTime(time);
+    
+    const avatarSvg = message.sender === 'user' ? 
+      `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="9" />
+        <text x="12" y="16" text-anchor="middle" fill="white" font-size="10" font-weight="bold">YOU</text>
+      </svg>` :
+      `<svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="8" r="3.5" />
+        <path d="M4 20c0-4 4-7 8-7s8 3 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>`;
+
+    messageDiv.innerHTML = `
+      <div class="message-avatar">
+        ${avatarSvg}
+      </div>
+      <div class="message-content">
+        <p>${this.escapeHtml(message.text)}</p>
+        <span class="message-time">${formattedTime}</span>
+      </div>
+    `;
+    
+    container.appendChild(messageDiv);
+  }
+
+  // Format time for display
+  formatTime(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return date.toLocaleDateString();
+  }
+
+  // Escape HTML for safety
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Scroll to bottom of chat
+  scrollToBottom() {
+    const container = document.getElementById('chatMessages');
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
 
   renderMessages() {
     const container = document.getElementById('chatMessages');
@@ -114,7 +242,66 @@ class Chat {
     }, 300);
   }
 
-  // ... rest of the class stays exactly the same (closeChat, init, setupEventListeners)
+  closeChat() {
+    const modal = document.getElementById('chatModal');
+    if (!modal) return;
+
+    modal.style.display = 'none';
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'auto';
+  }
+
+  init() {
+    this.setupEventListeners();
+  }
+
+  setupEventListeners() {
+    // Chat close button
+    const chatCloseBtn = document.getElementById('chatClose');
+    if (chatCloseBtn) {
+      chatCloseBtn.addEventListener('click', () => this.closeChat());
+    }
+
+    // Contact Us link (opens chat)
+    const contactLink = document.getElementById('contactUsLink');
+    if (contactLink) {
+      contactLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openChat();
+      });
+    }
+
+    // Chat form submission
+    const chatForm = document.getElementById('chatForm');
+    if (chatForm) {
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('chatInput');
+        if (input && input.value.trim()) {
+          this.addMessage(input.value.trim(), 'user');
+          input.value = '';
+        }
+      });
+    }
+
+    // Close chat when clicking outside
+    const chatModal = document.getElementById('chatModal');
+    if (chatModal) {
+      chatModal.addEventListener('click', (e) => {
+        if (e.target === chatModal) {
+          this.closeChat();
+        }
+      });
+    }
+
+    // Close chat with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && chatModal && chatModal.style.display === 'flex') {
+        this.closeChat();
+      }
+    });
+  }
 
   isAuthenticated() {
     return !!localStorage.getItem('currentUser');
