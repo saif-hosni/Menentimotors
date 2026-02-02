@@ -1,10 +1,10 @@
+// Chat System
 class Chat {
   constructor() {
     this.messages = this.loadMessages();
     this.init();
   }
 
-  // Load messages from localStorage
   loadMessages() {
     try {
       const messagesStr = localStorage.getItem('chatMessages');
@@ -15,7 +15,6 @@ class Chat {
     }
   }
 
-  // Save messages to localStorage
   saveMessages() {
     try {
       localStorage.setItem('chatMessages', JSON.stringify(this.messages));
@@ -24,7 +23,6 @@ class Chat {
     }
   }
 
-  // Add message
   addMessage(text, sender = 'user') {
     const message = {
       id: Date.now().toString(),
@@ -38,13 +36,11 @@ class Chat {
     this.renderMessage(message);
     this.scrollToBottom();
 
-    // Generate bot response after delay
     if (sender === 'user') {
       setTimeout(() => this.generateBotResponse(text), 800);
     }
   }
 
-  // Simple keyword-based bot response
   generateBotResponse(userMessage) {
     const lowerMessage = userMessage.toLowerCase();
     let response = "Thank you for your message. How can I assist you today?";
@@ -53,12 +49,11 @@ class Chat {
       response = "Hello! How can I assist you today?";
     } else if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('€')) {
       response = "Our prices vary depending on the vehicle. Would you like to see our showroom?";
-    } else if (lowerMessage.includes('vehicle') || lowerMessage.includes('car') || 
-               lowerMessage.includes('ferrari') || lowerMessage.includes('porsche') || 
+    } else if (lowerMessage.includes('vehicle') || lowerMessage.includes('car') ||
+               lowerMessage.includes('ferrari') || lowerMessage.includes('porsche') ||
                lowerMessage.includes('aston')) {
       response = "We have a great selection of luxury vehicles. Check out our showroom for details!";
-    } else if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || 
-               lowerMessage.includes('email')) {
+    } else if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('email')) {
       response = "You can reach us through this chat, or visit our showroom. We're here to help!";
     } else if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
       response = "You're welcome! Is there anything else I can help you with?";
@@ -67,7 +62,6 @@ class Chat {
     this.addMessage(response, 'bot');
   }
 
-  // Render a single message
   renderMessage(message) {
     const container = document.getElementById('chatMessages');
     if (!container) return;
@@ -100,7 +94,6 @@ class Chat {
     container.appendChild(messageDiv);
   }
 
-  // Format timestamp
   formatTime(timestamp) {
     const date = new Date(timestamp);
     const now = new Date();
@@ -112,22 +105,19 @@ class Chat {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  // Render all saved messages
   renderMessages() {
     const container = document.getElementById('chatMessages');
     if (!container) return;
 
-    container.innerHTML = ''; // Clear first
+    container.innerHTML = '';
 
     // Add welcome message
     this.addMessage("Hello! How can we help you today?", 'bot');
 
-    // Render saved messages (excluding welcome)
     this.messages.forEach(msg => this.renderMessage(msg));
     this.scrollToBottom();
   }
 
-  // Scroll to bottom
   scrollToBottom() {
     const container = document.getElementById('chatMessages');
     if (container) {
@@ -135,21 +125,19 @@ class Chat {
     }
   }
 
-  // Check if user is logged in
   isAuthenticated() {
-    // Try to use global auth object if it exists
-    if (typeof auth !== 'undefined' && auth?.currentUser) {
-      return true;
-    }
-    // Fallback to localStorage
     return !!localStorage.getItem('currentUser');
   }
 
-  // Open chat modal
   openChat() {
     const modal = document.getElementById('chatModal');
-    if (!modal) return;
+    if (!modal) {
+      console.warn('Chat modal not found');
+      return;
+    }
 
+    // Force show
+    modal.style.display = 'flex';
     modal.classList.add('open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -160,14 +148,12 @@ class Chat {
       this.renderMessages();
     }
 
-    // Focus input after a small delay
     setTimeout(() => {
       const input = document.getElementById('chatInput');
       if (input) input.focus();
     }, 300);
   }
 
-  // Show sign-in prompt instead of chat
   showSignInPrompt() {
     const container = document.getElementById('chatMessages');
     if (!container) return;
@@ -182,89 +168,86 @@ class Chat {
             </svg>
           </div>
           <h3>Sign In Required</h3>
-          <p>Please sign in to use the chat feature and contact our team.</p>
+          <p>Please sign in to use the chat feature.</p>
           <button id="chatSignInBtn" class="chat-sign-in-btn">Sign In</button>
         </div>
       </div>
     `;
 
-    const signInBtn = document.getElementById('chatSignInBtn');
-    if (signInBtn) {
-      signInBtn.addEventListener('click', () => {
-        this.closeChat();
-        // Open auth modal if auth system exists
-        if (typeof auth !== 'undefined' && typeof auth.openModal === 'function') {
-          setTimeout(() => auth.openModal(), 300);
-        }
-      });
-    }
+    document.getElementById('chatSignInBtn')?.addEventListener('click', () => {
+      this.closeChat();
+      // Open auth modal if it exists
+      const authModal = document.getElementById('authModal');
+      if (authModal) {
+        authModal.style.display = 'flex';
+        authModal.classList.add('open');
+      }
+    });
   }
 
-  // Close chat modal
   closeChat() {
     const modal = document.getElementById('chatModal');
     if (modal) {
+      modal.style.display = 'none';
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
   }
 
-  // Initialize
   init() {
     this.setupEventListeners();
   }
 
   setupEventListeners() {
-    const chatClose = document.getElementById('chatClose');
-    const chatModal = document.getElementById('chatModal');
-    const chatForm = document.getElementById('chatForm');
-    const chatInput = document.getElementById('chatInput');
-    const contactLinks = document.querySelectorAll('#contactUsLink, a[data-i18n="nav.contact"]');
+    // Find ALL possible Contact Us links
+    const contactLinks = document.querySelectorAll(
+      '#contactUsLink, a[data-i18n="nav.contact"], [data-i18n="nav.contact"]'
+    );
 
-    // Open chat when clicking "Contact Us" links
+    console.log('Found Contact Us links:', contactLinks.length); // Debug
+
     contactLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
+        console.log('Contact Us clicked – opening chat'); // Debug
         this.openChat();
       });
     });
 
-    // Close button
+    const chatClose = document.getElementById('chatClose');
     if (chatClose) {
       chatClose.addEventListener('click', () => this.closeChat());
     }
 
-    // Click outside to close
+    const chatModal = document.getElementById('chatModal');
     if (chatModal) {
       chatModal.addEventListener('click', (e) => {
         if (e.target === chatModal) this.closeChat();
       });
     }
 
-    // Escape key to close
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && chatModal?.classList.contains('open')) {
         this.closeChat();
       }
     });
 
-    // Form submit (send message)
+    const chatForm = document.getElementById('chatForm');
     if (chatForm) {
       chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (!chatInput) return;
-
-        const message = chatInput.value.trim();
+        const chatInput = document.getElementById('chatInput');
+        const message = chatInput?.value.trim();
         if (message) {
           this.addMessage(message, 'user');
           chatInput.value = '';
-          chatInput.focus();
+          chatInput?.focus();
         }
       });
     }
   }
 }
 
-// Initialize only once
+// Initialize chat
 const chat = new Chat();
