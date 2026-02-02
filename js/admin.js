@@ -378,6 +378,31 @@ class AdminManager {
     alert(message || 'An error occurred'); // fallback
     // You can expand this to use your error modal later
   }
+
+  closeErrorModal() {
+    const modal = document.getElementById('errorModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  handleErrorAction() {
+    if (this.errorActionCallback) {
+      this.errorActionCallback();
+    }
+    this.closeErrorModal();
+  }
+
+  openRequestsModal() {
+    if (!this.isCurrentUserAdmin()) return;
+    const modal = document.getElementById('requestsModal');
+    if (!modal) return;
+    // TODO: Populate with requests
+    modal.style.display = 'flex';
+  }
+
+  closeRequestsModal() {
+    const modal = document.getElementById('requestsModal');
+    if (modal) modal.style.display = 'none';
+  }
 }
 
 // Initialize
