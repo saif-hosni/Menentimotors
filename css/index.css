@@ -540,6 +540,76 @@ body {
   border-radius: 6px;
 }
 
+/* Chat sign-in overlay */
+.sign-in-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.sign-in-prompt {
+  background: var(--dark);
+  border: 1px solid rgba(212, 0, 0, 0.3);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.sign-in-icon {
+  margin-bottom: 20px;
+  color: var(--red);
+}
+
+.sign-in-prompt h3 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  color: var(--white);
+}
+
+.sign-in-prompt p {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.chat-sign-in-btn {
+  background: var(--red);
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--ease);
+}
+
+.chat-sign-in-btn:hover {
+  background: #b30000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 0, 0, 0.3);
+}
+
+/* Make sure chat header stays on top */
+.chat-header {
+  position: relative;
+  z-index: 11;
+}
+
+/* Hide input when prompt is shown */
+.chat-input-container {
+  transition: opacity 0.3s;
+}
+
 /* FOOTER */
 .site-footer {
   padding: 28px 12px;
